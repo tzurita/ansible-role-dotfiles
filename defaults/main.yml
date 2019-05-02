@@ -3,6 +3,7 @@
 dotfiles_home: "~"
 dotfiles_files:
   - .bash_profile
+  - .gitconfig
   - .gitignore
   - .inputrc
   - .vimrc
