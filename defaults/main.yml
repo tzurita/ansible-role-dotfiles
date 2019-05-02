@@ -7,7 +7,7 @@ dotfiles_files:
   - .inputrc
   - .vimrc
 
-dotfiles_repo: "https://github.com/tzurita/newdot.git"
+dotfiles_repo: "https://github.com/tzurita/dotfiles.git"
 dotfiles_repo_local_destination: "~/Documents/dotfiles"
 neovim_config_dir: ~/.config/nvim
 vim_config_dir: ~/.vim
