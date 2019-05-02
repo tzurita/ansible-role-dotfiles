@@ -20,7 +20,7 @@ vim_home: "~/.vim"
 
 dotfiles_home: "~"
 dotfiles_files:
- - .alias
+ - .aliases
  - .bash_profile
  - .tmux.conf
  - .vimrc
