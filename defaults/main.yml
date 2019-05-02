@@ -1,13 +1,4 @@
 ---
-
-dotfiles_home: "~"
-dotfiles_files:
-  - .bash_profile
-  - .gitconfig
-  - .gitignore
-  - .inputrc
-  - .vimrc
-
 dotfiles_repo: "https://github.com/tzurita/dotfiles.git"
 dotfiles_repo_local_destination: "~/Documents/dotfiles"
 neovim_config_dir: ~/.config/nvim
@@ -23,6 +14,7 @@ dotfiles_home: "~"
 dotfiles_files:
  - .aliases
  - .bash_profile
+ - .gitconfig
  - .tmux.conf
  - .vimrc
  - .zshrc
