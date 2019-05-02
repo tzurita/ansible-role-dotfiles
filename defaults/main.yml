@@ -1,0 +1,36 @@
+---
+
+dotfiles_home: "~"
+dotfiles_files:
+  - .bash_profile
+  - .gitignore
+  - .inputrc
+  - .vimrc
+
+dotfiles_repo: "https://github.com/tzurita/newdot.git"
+dotfiles_repo_local_destination: "~/Documents/dotfiles"
+neovim_config_dir: ~/.config/nvim
+vim_config_dir: ~/.vim
+spaceprompt_repo: "https://github.com/denysdovhan/spaceship-prompt.git"
+zsh_custom: "/home/zuritat/.oh-my-zsh/custom"
+dotfiles_repo_local_nvim_destination: "~/Documents/dotfiles/nvim"
+nvim_home: "~/.config/nvim"
+dotfiles_repo_local_vim_destination: "~/Documents/dotfiles/vim"
+vim_home: "~/.vim"
+
+dotfiles_home: "~"
+dotfiles_files:
+ - .alias
+ - .bash_profile
+ - .tmux.conf
+ - .vimrc
+ - .zshrc
+ - bin
+
+nvim_files:
+ - coc-settings.json
+ - init.vim
+ - plugins.vim
+ - snippets
+vim_files:
+ - UltiSnips

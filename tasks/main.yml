@@ -1,0 +1,115 @@
+
+---
+- name: Ensure dotfiles repository is cloned locally.
+  git:
+   repo: "{{ dotfiles_repo }}"
+   dest: "{{ dotfiles_repo_local_destination }}"
+  become: false
+
+# Install vim-plug
+- block:
+  - name: Make "{{ neovim_config_dir }}/autoload" directory
+    file: path="{{ neovim_config_dir }}/autoload" state=directory 
+
+  - name: Install vim-plug 
+    get_url:
+      url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      dest: "{{ neovim_config_dir }}/autoload/plug.vim"
+      force: yes
+
+      #    - block:
+      #        - name: Install vim plugins 
+      #          command: nvim "+silent! PlugInstall!" +qall!
+      #          tags: plugins
+      #
+- block:
+  - name: Make "{{ vim_config_dir }}/autoload" directory
+    file: path="{{ vim_config_dir }}/autoload" state=directory 
+
+- name: Install vim-plug 
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ vim_config_dir }}/autoload/plug.vim"
+    force: yes
+
+- name: Ensure all configured dotfiles are links.
+  command: "ls -F {{ dotfiles_home }}/{{ item }}"
+  register: existing_dotfile_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ dotfiles_files }}"
+
+- name: Remove existing dotfiles file if a replacement is being linked.
+  file:
+    path: "{{ dotfiles_home }}/{{ dotfiles_files[item.0] }}"
+    state: absent
+  when: "'@' not in item.1.stdout"
+  with_indexed_items: "{{ existing_dotfile_info.results }}"
+
+- name: Link dotfiles into home folder.
+  file:
+    src: "{{ dotfiles_repo_local_destination }}/{{ item }}"
+    dest: "{{ dotfiles_home }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ dotfiles_files }}"
+
+- name: Ensure all configured nvim dotfiles are links.
+  command: "ls -F {{ nvim_home }}/{{ item }}"
+  register: existing_nvim_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ nvim_files }}"
+
+- name: Remove existing nvim dotfiles file if a replacement is being linked.
+  file:
+    path: "{{ nvim_home }}/{{ nvim_files[item.0] }}"
+    state: absent
+  when: "'@' not in item.1.stdout"
+  with_indexed_items: "{{ existing_nvim_info.results }}"
+
+- name: Link vim dotfiles into nvim folder.
+  file:
+    src: "{{ dotfiles_repo_local_nvim_destination }}/{{ item }}"
+    dest: "{{ nvim_home }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ nvim_files }}"
+
+- name: Ensure all configured vim dotfiles are links.
+  command: "ls -F {{ vim_home }}/{{ item }}"
+  register: existing_vim_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ vim_files }}"
+
+- name: Remove existing vim dotfiles file if a replacement is being linked.
+  file:
+    path: "{{ vim_home }}/{{ vim_files[item.0] }}"
+    state: absent
+  when: "'@' not in item.1.stdout"
+  with_indexed_items: "{{ existing_vim_info.results }}"
+
+- name: Link vim dotfiles into vim folder.
+  file:
+    src: "{{ dotfiles_repo_local_vim_destination }}/{{ item }}"
+    dest: "{{ vim_home }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ vim_files }}"
+
+- name: Ensure spaceship repository is cloned locally.
+  git:
+    repo: "{{ spaceprompt_repo }}"
+    dest: "{{ zsh_custom }}/themes/spaceship-prompt"
+  become: false
+
+- name: Link spaceship repo into zsh themes folder.
+  file:
+    src: "{{ zsh_custom }}/themes/spaceship-prompt/spaceship.zsh-theme"
+    dest: "{{ zsh_custom }}/themes/spaceship.zsh-theme"
+    state: link
+  become: false
