@@ -1,45 +1,39 @@
-
----
+---                                                                                                                                                                                                                                                                                                                  [35/3912]
 - name: Ensure dotfiles repository is cloned locally.
-  git:
-   repo: "{{ dotfiles_repo }}"
+  git:               
+   repo: "{{ dotfiles_repo }}" 
    dest: "{{ dotfiles_repo_local_destination }}"
-  become: false
-
-# Install vim-plug
-- block:
+  become: false                                                            
+       
+# Install vim-plug                                
+- block:         
   - name: Make "{{ neovim_config_dir }}/autoload" directory
-    file: path="{{ neovim_config_dir }}/autoload" state=directory 
+    file: path="{{ neovim_config_dir }}/autoload" state=directory
 
-  - name: Install vim-plug 
+  - name: Install vim-plug for Nvim       
     get_url:
       url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
       dest: "{{ neovim_config_dir }}/autoload/plug.vim"
       force: yes
-
-      #    - block:
-      #        - name: Install vim plugins 
-      #          command: nvim "+silent! PlugInstall!" +qall!
-      #          tags: plugins
-      #
-- block:
+               
+- block:                       
   - name: Make "{{ vim_config_dir }}/autoload" directory
-    file: path="{{ vim_config_dir }}/autoload" state=directory 
-
-- name: Install vim-plug 
-  get_url:
-    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    dest: "{{ vim_config_dir }}/autoload/plug.vim"
-    force: yes
-
+    file: path="{{ vim_config_dir }}/autoload" state=directory
+      
+  - name: Install vim-plug for Vim
+    get_url:                                        
+      url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      dest: "{{ vim_config_dir }}/autoload/plug.vim"
+      force: yes
+                                                   
 - name: Ensure all configured dotfiles are links.
-  command: "ls -F {{ dotfiles_home }}/{{ item }}"
-  register: existing_dotfile_info
+  command: "ls -F {{ dotfiles_home }}/{{ item }}"                      
+  register: existing_dotfile_info                      
   failed_when: false
   check_mode: false
-  changed_when: false
+  changed_when: false                   
   with_items: "{{ dotfiles_files }}"
-
+  
 - name: Remove existing dotfiles file if a replacement is being linked.
   file:
     path: "{{ dotfiles_home }}/{{ dotfiles_files[item.0] }}"
@@ -106,6 +100,7 @@
     repo: "{{ spaceprompt_repo }}"
     dest: "{{ zsh_custom }}/themes/spaceship-prompt"
   become: false
+  when: ansible_distribution == 'Fedora'
 
 - name: Link spaceship repo into zsh themes folder.
   file:
@@ -113,3 +108,4 @@
     dest: "{{ zsh_custom }}/themes/spaceship.zsh-theme"
     state: link
   become: false
+  when: ansible_distribution == 'Fedora'
